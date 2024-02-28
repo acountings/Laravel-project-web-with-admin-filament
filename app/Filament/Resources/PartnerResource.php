@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\SectionResource\Pages;
-use App\Filament\Resources\SectionResource\RelationManagers;
-use App\Models\Section;
+use App\Filament\Resources\PartnerResource\Pages;
+use App\Filament\Resources\PartnerResource\RelationManagers;
+use App\Models\Partner;
 use Filament\Forms;
 use Filament\Forms\Components\Card;
 use Filament\Resources\Form;
@@ -16,31 +16,30 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Storage;
 
-class SectionResource extends Resource
+class PartnerResource extends Resource
 {
-    protected static ?string $model = Section::class;
+    protected static ?string $model = Partner::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-book-open';
+    protected static ?string $navigationIcon = 'heroicon-o-briefcase';
 
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                Card::make()->schema([
+        ->schema([
+            Card::make()->schema([
 
-                    Forms\Components\TextInput::make('title')
-                        ->required()
-                        ->maxLength(255),
-                    Forms\Components\FileUpload::make('thumbnail')
-                        ->required()->image()->disk('public'),
-                    Forms\Components\RichEditor::make('content')
-                        ->required()
-                        ->maxLength(255),
-                    Forms\Components\Select::make('post_as')->options([
-                        'JUMBOTRON'=> 'JUMBOTRON', 
-                        'ABOUT'=>'ABOUT'
-                ])
-             ]),
+                Forms\Components\TextInput::make('title')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\FileUpload::make('thumbnail')
+                    ->required()->image()->disk('public'),
+                Forms\Components\RichEditor::make('content')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('link')
+                    ->required()
+                    ->maxLength(255),
+            ]),
       ]);
     }
 
@@ -50,19 +49,16 @@ class SectionResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('title')->sortable()->searchable(),
                 Tables\Columns\ImageColumn::make('thumbnail'),
-                Tables\Columns\TextColumn::make('post_as'),
+                Tables\Columns\TextColumn::make('link')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime(),
             ])
-
             ->filters([
                 //
             ])
-
             ->actions([
-                Tables\Actions\EditAction::make()
-
-            ])          
+                Tables\Actions\EditAction::make(),
+            ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make()->after(function(Collection 
                 $records){
@@ -85,9 +81,9 @@ class SectionResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListSections::route('/'),
-            'create' => Pages\CreateSection::route('/create'),
-            'edit' => Pages\EditSection::route('/{record}/edit'),
+            'index' => Pages\ListPartners::route('/'),
+            'create' => Pages\CreatePartner::route('/create'),
+            'edit' => Pages\EditPartner::route('/{record}/edit'),
         ];
     }    
 }

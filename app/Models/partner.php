@@ -5,11 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
-
-class section extends Model
+class partner extends Model
 {
     use HasFactory;
-    protected $fillable = ['title', 'thumbnail', 'content', 'post_as'];
+    protected $fillable =['title','thumbnail','content','link'];
 
     protected static function boot()
     {
@@ -21,5 +20,4 @@ class section extends Model
             }
         });
     }
-    
 }
